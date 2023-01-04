@@ -91,5 +91,5 @@ polls/
 media/
 *.json
 *.ipynb
-
+.ipynb_checkpoints/
 *.mp3
