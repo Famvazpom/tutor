@@ -13,10 +13,16 @@ class TemaSerializer(serializers.ModelSerializer):
     materia = MateriaSerializer()
     class Meta:
         model = Tema
-        fields = '__all__'
+        exclude = ( "function",)
 
 class ExplicacionSerializer(serializers.ModelSerializer):
     tema = TemaSerializer()
     class Meta:
         model = Explicacion
+        fields = '__all__'
+
+class EjercicioSerializer(serializers.ModelSerializer):
+    tema = TemaSerializer()
+    class Meta:
+        model = Ejercicio
         fields = '__all__'

@@ -86,10 +86,11 @@ __pycache__/
 local_settings.py
 secret_key.py
 .env
-db.sqlite3
+*.csv
+*.data
 polls/
-media/
 *.json
 *.ipynb
 .ipynb_checkpoints/
-*.mp3
+.idea/
+.spyproject/

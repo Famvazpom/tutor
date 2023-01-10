@@ -2,3 +2,7 @@ django
 djangorestframework
 django_cleanup
 gtts
+networkx
+matplotlib
+django-cors-headers
+sympy

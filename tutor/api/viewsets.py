@@ -18,5 +18,7 @@ class ExplicacionViewSet(viewsets.ModelViewSet):
     serializer_class = ExplicacionSerializer
     permission_classes = [IsAuthenticated]
 
-
-
+class EjercicioViewSet(viewsets.ModelViewSet):
+    queryset = Ejercicio.objects.all()
+    serializer_class = EjercicioSerializer
+    permission_classes = [IsAuthenticated]
