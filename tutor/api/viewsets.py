@@ -5,7 +5,7 @@ from .serializers import *
 
 class MateriaViewSet(viewsets.ModelViewSet):
     queryset = Materia.objects.all()
-    serializer_class = MateriaSerializer
+    serializer_class = MateriaTemaSerializer
     permission_classes = []
 
 class TemaViewSet(viewsets.ModelViewSet):

@@ -15,6 +15,16 @@ class TemaSerializer(serializers.ModelSerializer):
         model = Tema
         exclude = ( "function",)
 
+class MateriaTemaSerializer(serializers.ModelSerializer):
+    temas = serializers.SerializerMethodField()
+    class Meta:
+        model = Materia
+        fields = '__all__'
+
+    def get_temas(self,obj):
+        temas = Tema.objects.filter(materia=obj)
+        return TemaSerializer(temas,many=True).data
+
 class ExplicacionSerializer(serializers.ModelSerializer):
     tema = TemaSerializer()
     class Meta:

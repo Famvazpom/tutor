@@ -6,7 +6,7 @@ from rest_framework import routers
 
 router = routers.SimpleRouter()
 
-router.register('materias',MateriaViewSet)
+router.register('materia',MateriaViewSet)
 router.register('temas',TemaViewSet)
 router.register('explicaciones',ExplicacionViewSet)
 router.register('ejercicios',EjercicioViewSet)
