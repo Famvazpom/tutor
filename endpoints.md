@@ -13,13 +13,72 @@ En este endpoint podras consultar todas las materias ingresadas en el tutor virt
 
 ### tutor/api/materias/id/
 
-En este endpoint podras consultar una materia especifica y modificarla en caso de ser necesario
+En este endpoint podras consultar una materia especifica, esta retorna sus datos base, los temas que esten relacionados a ella y la primera explicacion de cada tema
 
 Ejemplo de un objeto:
 ```
-    {
+{
         "id": 1,
+        "temas": [
+            {
+                "id": 1,
+                "materia": {
+                    "id": 1,
+                    "nombre": "PROPEDEUTICO DE MATEMATICAS",
+                    "corto": "PROPEDEUTI",
+                    "codigo": "MT-4716"
+                },
+                "explicacion": {
+                    "id": 4,
+                    "tema": {
+                        "id": 1,
+                        "materia": {
+                            "id": 1,
+                            "nombre": "PROPEDEUTICO DE MATEMATICAS",
+                            "corto": "PROPEDEUTI",
+                            "codigo": "MT-4716"
+                        },
+                        "nombre": "FACTORIZACION"
+                    },
+                    "anterior": "/tutor/api/explicaciones/1/",
+                    "siguiente": null,
+                    "titulo": "FACTORIZACION DE BINOMIOS CON TERMINO COMUN 2",
+                    "descripcion": "Observa que del producto se obtuvieron tres términos y además:\r\n\r\n+ Uno de los tres términos es el cuadrado del término común de ambos binomios.\r\n+ Otro de los tres términos es el producto de los términos que no son comunes en los binomios.\r\n+ El término restante es la suma de los términos no comunes multiplicados por el término común en los binomios.\r\n\r\nEstas observaciones son la clave para realizar la factorización, la cual es el proceso inverso del desarrollo del producto notable:\r\n\r\n\\begin{equation}\r\nx^2+(a+b)x+ab =  (x+a)(x+b)\r\n\\end{equation}",
+                    "voz": "/media/voz/None_FACTORIZACION_DE_BINOMIOS_CON_TERMINO_COMUN_2.mp3"
+                },
+                "nombre": "FACTORIZACION"
+            },
+            {
+                "id": 2,
+                "materia": {
+                    "id": 1,
+                    "nombre": "PROPEDEUTICO DE MATEMATICAS",
+                    "corto": "PROPEDEUTI",
+                    "codigo": "MT-4716"
+                },
+                "explicacion": {
+                    "id": 3,
+                    "tema": {
+                        "id": 2,
+                        "materia": {
+                            "id": 1,
+                            "nombre": "PROPEDEUTICO DE MATEMATICAS",
+                            "corto": "PROPEDEUTI",
+                            "codigo": "MT-4716"
+                        },
+                        "nombre": "FACTORIZACION DE MONOMIOS"
+                    },
+                    "anterior": "/tutor/api/explicaciones/2/",
+                    "siguiente": null,
+                    "titulo": "Monomio común Parte 2",
+                    "descripcion": "Observa que para factorizar el producto de un monomio por un polinomio seguimos los siguientes pasos:\r\n\r\n+ Identificamos el máximo común divisor de los términos del polinomio.\r\n+ Dividimos el polinomio entre el máximo común divisor con lo que obtenemos un factor. El segundo factor es el máximo común divisor.",
+                    "voz": "/media/voz/None_Monomio_com%C3%BAn_Parte_2.mp3"
+                },
+                "nombre": "FACTORIZACION DE MONOMIOS"
+            }
+        ],
         "nombre": "PROPEDEUTICO DE MATEMATICAS",
+        "corto": "PROPEDEUTI",
         "codigo": "MT-4716"
     }
 ```
@@ -32,19 +91,38 @@ En este endpoint podras consultar todos los temas ingresados en el tutor virtual
 
 ### tutor/api/temas/id/
 
-En este endpoint podras consultar un tema especifico y modificarlo en caso de ser necesario.
+En este endpoint podras consultar un tema especifico, retorna su información base y la primera parte de la explicacion del tema.
 
 Ejemplo de un objeto
 ```
- {
+  {
         "id": 1,
         "materia": {
             "id": 1,
             "nombre": "PROPEDEUTICO DE MATEMATICAS",
+            "corto": "PROPEDEUTI",
             "codigo": "MT-4716"
         },
+        "explicacion": {
+            "id": 4,
+            "tema": {
+                "id": 1,
+                "materia": {
+                    "id": 1,
+                    "nombre": "PROPEDEUTICO DE MATEMATICAS",
+                    "corto": "PROPEDEUTI",
+                    "codigo": "MT-4716"
+                },
+                "nombre": "FACTORIZACION"
+            },
+            "anterior": "/tutor/api/explicaciones/1/",
+            "siguiente": null,
+            "titulo": "FACTORIZACION DE BINOMIOS CON TERMINO COMUN 2",
+            "descripcion": "Observa que del producto se obtuvieron tres términos y además:\r\n\r\n+ Uno de los tres términos es el cuadrado del término común de ambos binomios.\r\n+ Otro de los tres términos es el producto de los términos que no son comunes en los binomios.\r\n+ El término restante es la suma de los términos no comunes multiplicados por el término común en los binomios.\r\n\r\nEstas observaciones son la clave para realizar la factorización, la cual es el proceso inverso del desarrollo del producto notable:\r\n\r\n\\begin{equation}\r\nx^2+(a+b)x+ab =  (x+a)(x+b)\r\n\\end{equation}",
+            "voz": "/media/voz/None_FACTORIZACION_DE_BINOMIOS_CON_TERMINO_COMUN_2.mp3"
+        },
         "nombre": "FACTORIZACION"
-    }
+    },
 ```
 
 ### tutor/api/explicaciones
@@ -53,7 +131,7 @@ En este endpoint podras consultar todas las explicaciones ingresados en el tutor
 
 ### tutor/api/explicaciones/id/
 
-En este endpoint podras consultar una explicacion en especifico y modificarla en caso de ser necesario.
+En este endpoint podras consultar una explicacion en especifico, entrega sus datos base, un enlace a la parte anterior y un enlace a la parte siguiente.
 
 Ejemplo de un objeto
 ```
