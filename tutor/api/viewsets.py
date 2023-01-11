@@ -10,7 +10,7 @@ class MateriaViewSet(viewsets.ModelViewSet):
 
 class TemaViewSet(viewsets.ModelViewSet):
     queryset = Tema.objects.all()
-    serializer_class = TemaSerializer
+    serializer_class = TemaExplicacionSerializer
     permission_classes = []
 
 class ExplicacionViewSet(viewsets.ModelViewSet):

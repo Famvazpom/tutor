@@ -9,9 +9,16 @@ m2s = math2speech()
 # Modelo de Materia
 class Materia(models.Model):
     nombre = models.CharField(max_length=50)
+    corto = models.CharField(max_length=50,blank=True,null=True)
     codigo = models.CharField(max_length=15)
+    
     def __str__(self):
         return self.nombre
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.corto = self.nombre[:10].lower()
+        return super().save(*args, **kwargs)
 
 # Modelo de Tema
 class Tema(models.Model):
@@ -32,7 +39,9 @@ class Explicacion(models.Model):
     siguiente = models.ForeignKey('self', related_name='explicacion_siguiente',on_delete=models.CASCADE, blank=True, null=True)
     
     def get_audiofile(self):
-        filename = f'{self.id}_{self.titulo.replace(" ","_")}.mp3'
+        id = Explicacion.objects.last().pk + 1 if self._state.adding else self.id
+        
+        filename = f'{id}_{self.titulo.replace(" ","_")}.mp3'
         voicename = f'{settings.MEDIA_ROOT}/voz/{filename}'
         result = re.split('\\\\begin{equation}\\r\\n(.*)\\r\\n\\\\end{equation}', self.descripcion)
         final = []
