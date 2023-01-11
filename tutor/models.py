@@ -17,7 +17,7 @@ class Materia(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.corto = self.nombre[:10].lower()
+        self.corto = self.nombre[:10]
         return super().save(*args, **kwargs)
 
 # Modelo de Tema
