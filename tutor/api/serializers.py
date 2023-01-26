@@ -10,18 +10,16 @@ class MateriaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TemaSerializer(serializers.ModelSerializer):
-    materia = MateriaSerializer()
     class Meta:
         model = Tema
-        exclude = ( "function",)
+        exclude = ( "function","materia")
 
 class ExplicacionSerializer(serializers.ModelSerializer):
-    tema = TemaSerializer()
     anterior = serializers.SerializerMethodField()
     siguiente = serializers.SerializerMethodField()
     class Meta:
         model = Explicacion
-        fields = '__all__'
+        exclude = ( "tema",)
 
     def get_anterior(self,obj):
         return reverse_lazy('explicacion-detail',kwargs={'pk':obj.anterior.pk}) if obj.anterior else None
@@ -30,11 +28,10 @@ class ExplicacionSerializer(serializers.ModelSerializer):
         return reverse_lazy('explicacion-detail',kwargs={'pk':obj.siguiente.pk}) if obj.siguiente else None
 
 class TemaExplicacionSerializer(serializers.ModelSerializer):
-    materia = MateriaSerializer()
     explicacion = serializers.SerializerMethodField()
     class Meta:
         model = Tema
-        exclude = ( "function",)
+        exclude = ( "function","materia")
     
     def get_explicacion(self,obj):
         explicacion = Explicacion.objects.filter(tema=obj).last()
