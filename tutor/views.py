@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions,status
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from django.contrib.auth import authenticate, login
 from tutor.api.serializers import EjercicioSerializer,LoginSerializer
 from tutor.models import Ejercicio,Tema
@@ -13,7 +14,7 @@ class GenerarEjercicioApiView(APIView):
 
     * Requiere autenticacion.
     """
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [JSONWebTokenAuthentication,]
 
     def get(self, request,tema=None):
         """
@@ -57,7 +58,7 @@ class GenerarEjercicioExplicadoApiView(APIView):
 
     * Requiere autenticacion.
     """
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [JSONWebTokenAuthentication,]
 
     def get(self, request,tema=None):
         """

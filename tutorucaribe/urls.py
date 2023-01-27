@@ -18,10 +18,14 @@ from django.conf import settings
 from django.urls import path,include
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from rest_framework_jwt.views import refresh_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tutor/', include('tutor.urls')),
+    path('login/', obtain_jwt_token),
+    path('refresh-token/', refresh_jwt_token),
 ]
 
 
