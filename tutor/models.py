@@ -1,4 +1,5 @@
 import re
+import json
 from django.db import models
 from usuarios.models import Perfil
 from .math2speech import math2speech
@@ -25,6 +26,7 @@ class Tema(models.Model):
     nombre = models.CharField(max_length=50)
     materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
     function = models.CharField(max_length=50,blank=True, null=True)
+    clave = models.CharField(max_length=50,blank=True, null=True)
 
     def __str__(self):
         return self.nombre
@@ -67,18 +69,20 @@ class Explicacion(models.Model):
 
 # Modelo de Ejercicio
 class Ejercicio(models.Model):
-    fecha = models.DateTimeField(auto_now_add=True) # Fecha de creacion del ejercicio
     enunciado = models.TextField()
     respuesta = models.TextField()
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
-    alumno = models.ForeignKey(Perfil, on_delete=models.CASCADE) #Alumno al que se le asigno el ejercicio
-    resuelto = models.BooleanField(default=False)
-    errores = models.IntegerField(default=0)
-    intentos = models.IntegerField(default=0)
-    primerintento = models.BooleanField(default=False) # Correcto al primer intento
+    opciones = models.TextField(blank=True, null=True)
+    dificultad = models.IntegerField(default=1)
+
+    def set_opciones(self, x):
+        self.opciones = json.dumps(x)
+
+    def get_opciones(self):
+        return json.loads(self.opciones)
 
     def __str__(self):
-        return f'{self.pk} - {self.alumno} - {self.enunciado}'
+        return f'{self.pk} - {self.enunciado}'
 
 # Modelo de EstudianteTema (Relacion entre un estudiante y un tema)
 class EstudianteTema(models.Model):

@@ -1,4 +1,4 @@
-django
+django==3.2.15
 djangorestframework
 django_cleanup
 gtts
@@ -6,3 +6,5 @@ networkx
 matplotlib
 django-cors-headers
 sympy
+djangorestframework-jwt
+djangorestframework-recaptcha

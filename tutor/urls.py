@@ -12,7 +12,6 @@ router.register('explicaciones',ExplicacionViewSet)
 router.register('ejercicios',EjercicioViewSet)
 
 urlpatterns = [
-    path('api/ejercicios/<int:tema>/generar',login_required(GenerarEjercicioApiView.as_view()),name='ejercicio'),
     # [------------- API --------------] # 
     path('api/',include(router.urls))
 ]
