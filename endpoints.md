@@ -130,31 +130,46 @@ Ejemplo de un objeto
 
 ### tutor/api/ejercicios
 
-En este endpoint podras consultar todos los ejercicios generados en el tutor virtual
+En este endpoint podras recibir un ejercicio para el estudiante.
 
-### tutor/api/ejercicios/id/
+### tutor/api/ejercicio/
 
-En este endpoint podras consultar un ejercicio especifico y modificarlo en caso de ser necesario.
+Params: 
+* id: Id del ejercicio 
+* tema: Id del tema del ejercicio
 
-Ejemplo de un objeto
+Si envias el ID del ejercicio te entregara el ejercicio en cuestion por ejemplo:
 ```
-     {
-        "id": 1,
-        "tema": {
-            "id": 1,
-            "materia": {
-                "id": 1,
-                "nombre": "PROPEDEUTICO DE MATEMATICAS",
-                "codigo": "MT-4716"
+    {
+        "id": 12,
+        "ejercicio": {
+            "id": 86,
+            "tema": {
+                "id": 3,
+                "nombre": "FACTORIZACION DE BINOMIOS CUADRADOS",
+                "clave": "fact_bin2"
             },
-            "nombre": "FACTORIZACION"
+            "enunciado": "Factoriza la siguiente expresión: $$y^{2} - 8 y + 16$$",
+            "respuesta": "5",
+            "opciones": "['$$\\\\left(y + 4\\\\right)^{2}$$', '$$\\\\left(y + 2\\\\right)^{2}$$', '$$\\\\left(y + 8\\\\right)^{2}$$', '$$\\\\left(y - 8\\\\right)^{2}$$', '$$\\\\left(y - 2\\\\right)^{2}$$', '$$\\\\left(y - 4\\\\right)^{2}$$']",
+            "dificultad": 1
         },
-        "enunciado": "Factoriza la siguiente expresión: $$x^{4} y^{2} z^{2} - 6 x^{3} y z - 6 x^{2} y^{3} z^{3} + 9 x^{2} + 18 x y^{2} z^{2} + 9 y^{4} z^{4}$$",
-        "respuesta": "\\left(x^{2} y z - 3 x - 3 y^{2} z^{2}\\right)^{2}",
-        "alumno": 1
-    },
+        "correcto": true,
+        "fecha_inicio": "2023-03-07T17:26:13.634703Z",
+        "fecha_fin": "2023-03-07T17:46:18.074467Z",
+        "intentos": 1,
+        "primera_respuesta": true,
+        "estudiante": 1
+    }
 ```
 
-### tutor/api/ejercicios/id_tema/generar
+En caso de no enviar el ID, es necesario enviar el id del tema del ejercicio para poder generar un ejercicio:
 
-En este endpoint podras generar un ejercicio aleatorio del tema seleccionado y asignarlo al usuario que realiza la petición.
+
+#### POST
+
+Para realizar un POST a este endpoint es necesario dos cosas:
+* id: Id del ejercicio
+* aswer: Id de la respuesta entregada
+
+Te retornara el objeto actualizado, el parametro "correcto" determina si la respuesta fue correcta o no.

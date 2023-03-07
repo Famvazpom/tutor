@@ -9,9 +9,9 @@ router = routers.SimpleRouter()
 router.register('materia',MateriaViewSet)
 router.register('temas',TemaViewSet)
 router.register('explicaciones',ExplicacionViewSet)
-router.register('ejercicios',EjercicioViewSet)
 
 urlpatterns = [
     # [------------- API --------------] # 
-    path('api/',include(router.urls))
+    path('api/',include(router.urls)),
+    path('api/ejercicio/',EjercicioAPIView.as_view()),
 ]

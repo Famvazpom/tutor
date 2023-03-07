@@ -88,7 +88,19 @@ class Ejercicio(models.Model):
 class EstudianteTema(models.Model):
     estudiante = models.ForeignKey(Perfil, on_delete=models.CASCADE)
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
-    nivel = models.IntegerField(default=0) # Utilizado para determinar el nivel de dificultad de los ejercicios
+    nivel = models.IntegerField(default=1) # Utilizado para determinar el nivel de dificultad de los ejercicios
 
     def __str__(self):
         return f'{self.estudiante} - {self.tema}'
+    
+class EstudianteEjercicio(models.Model):
+    estudiante = models.ForeignKey(Perfil, on_delete=models.CASCADE)
+    ejercicio = models.ForeignKey(Ejercicio, on_delete=models.CASCADE)
+    correcto = models.BooleanField(default=False)
+    fecha_inicio = models.DateTimeField(auto_now_add=True)
+    fecha_fin = models.DateTimeField(auto_now=True)
+    intentos = models.IntegerField(default=0)
+    primera_respuesta = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.estudiante} - {self.ejercicio} - {self.ejercicio.dificultad}'

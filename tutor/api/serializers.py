@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
-from tutor.models import Materia, Tema, Explicacion, Ejercicio
+from tutor.models import Materia, Tema, Explicacion, Ejercicio,EstudianteEjercicio,EstudianteTema
 from django.contrib.auth import authenticate
 
 class MateriaSerializer(serializers.ModelSerializer):
@@ -51,6 +51,12 @@ class EjercicioSerializer(serializers.ModelSerializer):
     tema = TemaSerializer()
     class Meta:
         model = Ejercicio
+        fields = '__all__'
+
+class EstudianteEjercicioSerializer(serializers.ModelSerializer):
+    ejercicio = EjercicioSerializer()
+    class Meta:
+        model = EstudianteEjercicio
         fields = '__all__'
 
 
