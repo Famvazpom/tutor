@@ -128,7 +128,7 @@ Ejemplo de un objeto
     }
 ```
 
-### tutor/api/ejercicios
+### tutor/api/ejercicio
 
 En este endpoint podras recibir un ejercicio para el estudiante.
 
