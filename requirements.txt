@@ -8,3 +8,6 @@ django-cors-headers
 sympy
 djangorestframework-jwt
 djangorestframework-recaptcha
+pyBKT
+pandas
+numpy

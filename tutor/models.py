@@ -96,11 +96,12 @@ class EstudianteTema(models.Model):
 class EstudianteEjercicio(models.Model):
     estudiante = models.ForeignKey(Perfil, on_delete=models.CASCADE)
     ejercicio = models.ForeignKey(Ejercicio, on_delete=models.CASCADE)
-    correcto = models.BooleanField(default=False)
+    correcto = models.BooleanField(default=False) # Ya respondido correctamente
+    correctos = models.IntegerField(verbose_name="VecesCorrecto",default=0) # Cuantas veces ha respondido correctamente
     fecha_inicio = models.DateTimeField(auto_now_add=True)
     fecha_fin = models.DateTimeField(auto_now=True)
-    intentos = models.IntegerField(default=0)
-    primera_respuesta = models.BooleanField(default=False)
+    intentos = models.IntegerField(default=0) # Cuantas veces lo ha realizado
+    primera_respuesta = models.BooleanField(default=False) # Correcto al primer intento
 
     def __str__(self):
         return f'{self.estudiante} - {self.ejercicio} - {self.ejercicio.dificultad}'

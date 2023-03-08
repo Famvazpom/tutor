@@ -8,6 +8,9 @@ from tutor.api.serializers import EjercicioSerializer,LoginSerializer,Estudiante
 from tutor.api.exceptions import *
 from tutor.models import Ejercicio,Tema,EstudianteEjercicio,EstudianteTema
 from tutor.sistema_experto.Ejercicios.EjProdNotFact import rand_fact, mix_fact_1, mix_fact_2
+import pandas as pd
+import numpy as np
+from pyBKT.models import Model, Roster
 
 import random
 
@@ -25,6 +28,40 @@ class LoginView(APIView):
     
 
 class EjercicioAPIView(APIView):
+
+    def update_difficulty(self,estudiante,tema,ejercicio):
+        # Se filtran los ejercicios del tema y se crea un dataframe con los datos
+        ejercicios = EstudianteEjercicio.objects.filter(ejercicio__tema=tema)
+        df = pd.DataFrame.from_records(ejercicios.values())
+        temas = [ f'{i.ejercicio.tema.__str__()} - { i.ejercicio.dificultad }' for i in ejercicios ]
+        single = list(np.unique(temas))
+        df['tema'] =  temas
+        df['correcto'] = np.where((df['intentos'] == 0 ),-1,df['correcto'])
+
+        # Se crea el modelo y se entrena con los datos del dataframe
+        model = Model(seed=25)
+        defaults = {'order_id': 'id','user_id':'estudiante_id' ,'skill_name': 'tema', 'correct': 'correcto'}
+        model.fit(data=df,defaults = defaults)
+        
+        # Se crea un roster con los estudiantes y se obtiene la probabilidad de dominio del estudiante
+
+
+        roster = Roster(students = [estudiante.pk], skills = single, model = model)
+        maestria = roster.get_mastery_prob(f'{ejercicio.ejercicio.tema.__str__()} - { ejercicio.ejercicio.dificultad }', estudiante.pk)
+
+        # Se actualiza la dificultad del estudiante en base a la maestria del tema
+        if maestria > .80:
+
+            estudiantes_tema,_ = EstudianteTema.objects.get_or_create(tema=tema,estudiante=estudiante)
+            estudiantes_tema.nivel = ejercicio.ejercicio.dificultad + 1
+            estudiantes_tema.save()
+        
+        if maestria < .20:
+
+            estudiantes_tema,_ = EstudianteTema.objects.get_or_create(tema=tema,estudiante=estudiante)
+            estudiantes_tema.nivel = max(ejercicio.ejercicio.dificultad - 1,1)
+            estudiantes_tema.save()
+        return
     
     def get(self,request):
         id = request.GET.get('id')
@@ -89,6 +126,7 @@ class EjercicioAPIView(APIView):
         # Se verifica si la respuesta es correcta y se agregan valores a los atributos del ejercicio
         if ejercicio.ejercicio.respuesta == respuesta.__str__():
             ejercicio.correcto = True
+            ejercicio.correctos += 1
             ejercicio.primera_respuesta = True if ejercicio.intentos == 0 else False # Correcto en la primera respuesta
             ejercicio.intentos +=1
             ejercicio.fin = now()
@@ -97,4 +135,5 @@ class EjercicioAPIView(APIView):
             ejercicio.intentos +=1
         ejercicio.save()
 
+        self.update_difficulty(request.user.perfil,ejercicio.ejercicio.tema,ejercicio)
         return Response(EstudianteEjercicioSerializer(ejercicio).data)
