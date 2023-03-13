@@ -7,7 +7,6 @@ from django.utils.timezone import now
 from tutor.api.serializers import EjercicioSerializer,LoginSerializer,EstudianteEjercicioSerializer
 from tutor.api.exceptions import *
 from tutor.models import Ejercicio,Tema,EstudianteEjercicio,EstudianteTema
-from tutor.sistema_experto.Ejercicios.EjProdNotFact import rand_fact, mix_fact_1, mix_fact_2
 import pandas as pd
 import numpy as np
 from pyBKT.models import Model, Roster
