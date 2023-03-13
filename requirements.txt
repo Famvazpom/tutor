@@ -2,6 +2,7 @@ django==3.2.15
 djangorestframework
 django_cleanup
 gtts
+scikit-learn
 networkx
 matplotlib
 django-cors-headers

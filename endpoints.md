@@ -173,3 +173,22 @@ Para realizar un POST a este endpoint es necesario dos cosas:
 * aswer: Id de la respuesta entregada
 
 Te retornara el objeto actualizado, el parametro "correcto" determina si la respuesta fue correcta o no.
+
+
+### refresh-token/
+
+En este end point puedes refrescar el token en caso de que expire.
+
+#### POST
+
+Para realizar un POST a este endpoint es necesario una cosa en el body:
+* token: token a refrescar
+
+### verify-token/
+
+En este end point puedes verificar el token en caso de que expire.
+
+#### POST
+
+Para realizar un POST a este endpoint es necesario una cosa en el body:
+* token: token a verificar
