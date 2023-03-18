@@ -90,6 +90,8 @@ class EstudianteTema(models.Model):
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
     nivel = models.IntegerField(default=1) # Utilizado para determinar el nivel de dificultad de los ejercicios
     maestria = models.FloatField(default=0)
+    last_msg = models.TextField(blank=True, null=True) # Ultimo mensaje enviado al estudiante
+
     
     def __str__(self):
         return f'{self.estudiante} - {self.tema}'
