@@ -49,17 +49,14 @@ class EjercicioAPIView(APIView):
         maestria = roster.get_mastery_prob(f'{ejercicio.ejercicio.tema.__str__()} - { ejercicio.ejercicio.dificultad }', estudiante.pk)
 
         # Se actualiza la dificultad del estudiante en base a la maestria del tema
+        estudiantes_tema,_ = EstudianteTema.objects.get_or_create(tema=tema,estudiante=estudiante)
         if maestria > .80:
-
-            estudiantes_tema,_ = EstudianteTema.objects.get_or_create(tema=tema,estudiante=estudiante)
             estudiantes_tema.nivel = ejercicio.ejercicio.dificultad + 1
-            estudiantes_tema.save()
-        
         if maestria < .20:
-
-            estudiantes_tema,_ = EstudianteTema.objects.get_or_create(tema=tema,estudiante=estudiante)
             estudiantes_tema.nivel = max(ejercicio.ejercicio.dificultad - 1,1)
-            estudiantes_tema.save()
+
+        estudiantes_tema.maestria = maestria
+        estudiantes_tema.save()
         return
     
     def get(self,request):

@@ -128,6 +128,51 @@ Ejemplo de un objeto
     }
 ```
 
+### tutor/api/estudiante
+
+En este endpoint podras recibir toda la informacion relevante del estudiante que inicio sesion.
+
+```
+    [
+        {
+            "id": 1,
+            "nombre": "NOE VAZQUEZ POMPA",
+            "materias": [
+                {
+                    "id": 1,
+                    "temas": [
+                        {
+                            "tema": {
+                                "id": 1,
+                                "nombre": "FACTORIZACION",
+                                "clave": null
+                            },
+                            "nivel": 2,
+                            "maestria": 0.0
+                        },
+                        {
+                            "tema": {
+                                "id": 3,
+                                "nombre": "FACTORIZACION DE BINOMIOS CUADRADOS",
+                                "clave": "fact_bin2"
+                            },
+                            "nivel": 3,
+                            "maestria": 0.6826417596961675
+                        }
+                    ],
+                    "nombre": "PROPEDEUTICO DE MATEMATICAS",
+                    "corto": "PROPEDEUTI",
+                    "codigo": "MT-4716"
+                }
+            ],
+            "programa_educativo": {
+                "nombre": "IDEIO",
+                "codigo": "ADSSAEQW"
+            }
+        }
+    ]
+```
+
 ### tutor/api/ejercicio
 
 En este endpoint podras recibir un ejercicio para el estudiante.

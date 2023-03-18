@@ -9,6 +9,7 @@ router = routers.SimpleRouter()
 router.register('materia',MateriaViewSet)
 router.register('temas',TemaViewSet)
 router.register('explicaciones',ExplicacionViewSet)
+router.register('estudiante',EstudianteViewSet)
 
 urlpatterns = [
     # [------------- API --------------] # 

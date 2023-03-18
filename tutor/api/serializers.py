@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from rest_framework import serializers
-from rest_framework.fields import SerializerMethodField
 from tutor.models import Materia, Tema, Explicacion, Ejercicio,EstudianteEjercicio,EstudianteTema
+from usuarios.models import Perfil,ProgramaEducativo
 from django.contrib.auth import authenticate
 
 class MateriaSerializer(serializers.ModelSerializer):
@@ -59,7 +59,6 @@ class EstudianteEjercicioSerializer(serializers.ModelSerializer):
         model = EstudianteEjercicio
         fields = '__all__'
 
-
 class LoginSerializer(serializers.Serializer):
     """
     This serializer defines two fields for authentication:
@@ -99,3 +98,38 @@ class LoginSerializer(serializers.Serializer):
         # It will be used in the view.
         attrs['user'] = user
         return attrs
+    
+
+class ProgramaEducativoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProgramaEducativo
+        exclude = ('id',)
+
+class EstudianteTemaSerializer(serializers.ModelSerializer):
+    tema = TemaSerializer()
+    class Meta:
+        model = EstudianteTema
+        exclude = ('estudiante','id')
+
+class MateriaEstudianteSerializer(serializers.ModelSerializer):
+    temas = serializers.SerializerMethodField()
+    class Meta:
+        model = Materia
+        fields = '__all__'
+    def get_temas(self,object):
+        return EstudianteTemaSerializer(EstudianteTema.objects.filter(estudiante=self.context['request'].user.perfil),many=True,context={'request': self.context['request']}).data
+
+class PerfilSerializer(serializers.ModelSerializer):
+    nombre = serializers.SerializerMethodField()
+    materias = serializers.SerializerMethodField()
+    programa_educativo = ProgramaEducativoSerializer()
+
+    class Meta:
+        model= Perfil
+        exclude = ('user','apellido_materno')
+
+    def get_nombre(self,object):
+        return f'{object.user.first_name} {object.user.last_name} {object.apellido_materno}'
+
+    def get_materias(self,object):
+        return MateriaEstudianteSerializer(Materia.objects.all(),many=True,context={'request': self.context['request']}).data

@@ -2,6 +2,7 @@ from rest_framework import viewsets,permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from tutor.models import Materia, Tema, Explicacion, Ejercicio
+from usuarios.models import Perfil
 from .serializers import *
 
 class MateriaViewSet(viewsets.ModelViewSet):
@@ -27,3 +28,12 @@ class EjercicioViewSet(viewsets.ModelViewSet):
     serializer_class = EjercicioSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JSONWebTokenAuthentication,]
+
+class EstudianteViewSet(viewsets.ModelViewSet):
+    queryset = Perfil.objects.all()
+    serializer_class = PerfilSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JSONWebTokenAuthentication,]
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)
