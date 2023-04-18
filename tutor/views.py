@@ -44,34 +44,41 @@ class EjercicioAPIView(APIView):
         temas = [ f'{i.ejercicio.tema.__str__()} - { i.ejercicio.dificultad }' for i in ejercicios ]
         single = np.unique(temas).tolist()
         df['tema'] =  temas
-        
+        del df['fecha_inicio']
+        del df['fecha_fin']
+        df.to_csv('dataset.csv')
+        del df
+
+        df = pd.read_csv('dataset.csv')
         # Se asigna el valor correcto al dataframe, 0 si el estudiante no lo resolvió y 1 si lo resolvió y -1 si no lo intentó
         df['correcto'] = np.where((df['intentos'] == 0 ),-1,df['correcto'])
+        df['Annon Student Id'] = df['estudiante_id']
+        
 
+        
         # Se crea el modelo y se ajustan los datos
-        model = Model(num_fits=5)
+        model = Model(seed = 50,num_fits=5)
         defaults = {'order_id': 'id','user_id':'estudiante_id' ,'skill_name': 'tema', 'correct': 'correcto'}
         model.fit(data=df,defaults = defaults)
         # Se guarda el modelo en un archivo pickle
         model.save('bkt-model.pkl')
         
         # Crear Roster
-        estudiantes = [ i.pk for i in Perfil.objects.all()]
+        estudiantes = list(df.estudiante_id.unique())
+        temas = list(df.tema.unique())
         roster = Roster(students=estudiantes, skills = single, model = model,mastery_state=.8)
         roster.students = estudiantes
         roster.skills = temas
         # Se guarda el roster en un archivo pickle
         self.dump_roster(roster)
         # Liberar memoria
-        del model
-        return roster
+        return roster,model
 
     def get_or_create_model_roster(self):
         # Crear el modelo de BKT o cargarlo si ya existe
         try:
             with open('bkt-roster.pkl','rb') as f:
                 roster = pickle.load(f)
-            
         except IOError:
             roster = self.create_model_roster()
            
@@ -83,25 +90,25 @@ class EjercicioAPIView(APIView):
 
     def update_difficulty(self,estudiante,tema,ejercicio):
         # Se obtiene el roster
-        roster = self.get_or_create_model_roster()
+        roster,model = self.get_or_create_model_roster()
         skill = f'{ejercicio.ejercicio.tema.__str__()} - { ejercicio.ejercicio.dificultad }'
         student = estudiante.pk
         # Se actualiza el roster con el ejercicio resuelto
         try:
             # Intentar actualizar estado
             roster.update_state(skill, student,self.get_status(ejercicio))
-            self.dump_roster(roster)
+
         except ValueError as e:
             # Si no existe skill, crear modelo de nuevo
             if 'skill not found' in str(e): 
                 
-                roster = self.create_model_roster()
+                roster,model = self.create_model_roster()
             
             # Agregar estudiante y actualizar su estado
             if 'student name not found' in str(e):
                 roster.add_student(skill,student)
                 roster.update_state(skill, student,self.get_status(ejercicio))
-                self.dump_roster(roster)
+
         maestria = roster.get_mastery_prob(skill, estudiante.pk)
         print(f'Correcto {self.get_status(ejercicio)}')
         print(f'Maestria: {maestria}, Dificultad: {ejercicio.ejercicio.dificultad}, Estudiante: {estudiante}, Tema: {tema.pk}')
@@ -199,3 +206,4 @@ class EjercicioAPIView(APIView):
 
         self.update_difficulty(request.user.perfil,ejercicio.ejercicio.tema,ejercicio)
         return Response(EstudianteEjercicioSerializer(ejercicio).data)
+    

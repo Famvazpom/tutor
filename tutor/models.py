@@ -35,6 +35,7 @@ class Tema(models.Model):
 class Explicacion(models.Model):
     titulo = models.CharField(max_length=50)
     descripcion = models.TextField()
+    voz_texto = models.TextField()
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
     voz = models.FileField(upload_to='media/voz/',max_length=50,blank=True, null=True)
     anterior = models.ForeignKey('self', related_name='explicacion_anterior',on_delete=models.CASCADE, blank=True, null=True)
@@ -56,7 +57,6 @@ class Explicacion(models.Model):
                 math = math2speech()
                 c = math.procesaCadena(text,[char for char in text if char.isalpha()])
                 final[id] = math.obtenCadena(0,c['arbol'])
-
         m2s.generaAudio(''.join(final),filename=voicename)
         return f'voz/{filename}'
 
