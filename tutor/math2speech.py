@@ -63,11 +63,11 @@ class math2speech:
         if '^' in valor and not '^(':
             valor_n = valor.replace('^','')
             valor_n = valor_n.replace('','')
-            return self.exponentes.get(int(valor_n),f'A LA POTENCIA {valor_n}')
+            return self.exponentes.get(int(valor_n),f'A LA POTENCIA {valor_n}') if valor_n.isnumeric() else valor
         if '^(' in valor:
             valor_n = valor.replace('^(','')
             valor_n = valor_n.replace(')','')
-            return self.exponentes.get(int(valor_n),f'A LA POTENCIA {valor_n}')
+            return self.exponentes.get(int(valor_n),f'A LA POTENCIA {valor_n}') if valor_n.isnumeric() else valor
         if ')=' in valor:
             valor = valor.replace(')','')
             return valor

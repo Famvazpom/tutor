@@ -38,15 +38,21 @@ class Explicacion(models.Model):
     voz_texto = models.TextField()
     tema = models.ForeignKey(Tema, on_delete=models.CASCADE)
     voz = models.FileField(upload_to='media/voz/',max_length=50,blank=True, null=True)
+    dificultad = models.IntegerField(default=1)
+    detalles = models.TextField(null=True,blank=True)
     anterior = models.ForeignKey('self', related_name='explicacion_anterior',on_delete=models.CASCADE, blank=True, null=True)
     siguiente = models.ForeignKey('self', related_name='explicacion_siguiente',on_delete=models.CASCADE, blank=True, null=True)
     
     def get_audiofile(self):
-        id = Explicacion.objects.last().pk + 1 if self._state.adding else self.id
+        obj = Explicacion.objects.last()
+        if self._state.adding:
+            id = obj.pk + 1 if obj else 1
+        else:
+            id = self.id
         
         filename = f'{id}_{self.titulo.replace(" ","_")}.mp3'
         voicename = f'{settings.MEDIA_ROOT}/voz/{filename}'
-        result = re.split('\\\\begin{equation}\\r\\n(.*)\\r\\n\\\\end{equation}', self.descripcion)
+        result = re.split('\\\\begin{equation}\\r\\n(.*)\\r\\n\\\\end{equation}', self.voz_texto)
         final = []
         for i in result:
             final += re.split('\$(.*)\$',i)
@@ -54,9 +60,10 @@ class Explicacion(models.Model):
             
         for id,text in enumerate(final):
             if id > 0 and id%2==1:
+
                 math = math2speech()
-                c = math.procesaCadena(text,[char for char in text if char.isalpha()])
-                final[id] = math.obtenCadena(0,c['arbol'])
+                c = math.procesaCadena(text,[char for char in text if char.isalpha()]) 
+                final[id] = math.obtenCadena(0,c['arbol']) if c else final[id]
         m2s.generaAudio(''.join(final),filename=voicename)
         return f'voz/{filename}'
 

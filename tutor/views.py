@@ -4,9 +4,9 @@ from rest_framework import authentication, permissions,status
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from django.contrib.auth import authenticate, login
 from django.utils.timezone import now
-from tutor.api.serializers import EjercicioSerializer,LoginSerializer,EstudianteEjercicioSerializer
+from tutor.api.serializers import ExplicacionSerializer,LoginSerializer,EstudianteEjercicioSerializer
 from tutor.api.exceptions import *
-from tutor.models import Ejercicio,Tema,EstudianteEjercicio,EstudianteTema
+from tutor.models import Ejercicio,Tema,EstudianteEjercicio,EstudianteTema,Explicacion
 from usuarios.models import Perfil
 import pandas as pd
 import numpy as np
@@ -27,6 +27,37 @@ class LoginView(APIView):
         login(request, user)
         return Response(None, status=status.HTTP_202_ACCEPTED)
     
+
+class ExplicacionAPIView(APIView):
+    
+    def get(self,request):
+        tema = request.GET.get('tema',None)
+        # Verificar la existencia de TEMA en GET, esto solo aplica si no se proporciona un ID
+        if not tema:
+            return Response(NoTheme.default_detail,status=NoTheme.status_code)
+       
+        # Se obtiene la dificultad del estudiante con respecto al tema
+        tema = Tema.objects.get(pk=tema)
+        estudiante,_ = EstudianteTema.objects.get_or_create(tema=tema,estudiante=request.user.perfil)
+        # Si no se proporciona un ID, se selecciona un ejercicio aleatorio del tema en base
+        # a la dificultad del estudiante
+        nivel = estudiante.nivel
+        ejercicio = None
+
+        # Se buscan ejercicios de la dificultad del estudiante, si no se encuentran se buscan de dificultad menor
+        while not ejercicio and nivel > 0:
+            ejercicio = Explicacion.objects.filter(tema=tema,dificultad=estudiante.nivel,anterior=None)
+            nivel -= 1
+
+        # Si no se encuentran ejercicios se envia error
+        if not ejercicio:
+            return Response(NotExplain.default_detail,status=NoEjercicio.status_code)
+        
+        ejercicio = random.choice(ejercicio)    
+
+        return Response(ExplicacionSerializer(ejercicio).data)
+    
+
 
 class EjercicioAPIView(APIView):
 
@@ -72,13 +103,14 @@ class EjercicioAPIView(APIView):
         # Se guarda el roster en un archivo pickle
         self.dump_roster(roster)
         # Liberar memoria
-        return roster,model
+        return roster
 
     def get_or_create_model_roster(self):
         # Crear el modelo de BKT o cargarlo si ya existe
         try:
             with open('bkt-roster.pkl','rb') as f:
                 roster = pickle.load(f)
+
         except IOError:
             roster = self.create_model_roster()
            
@@ -90,7 +122,7 @@ class EjercicioAPIView(APIView):
 
     def update_difficulty(self,estudiante,tema,ejercicio):
         # Se obtiene el roster
-        roster,model = self.get_or_create_model_roster()
+        roster = self.get_or_create_model_roster()
         skill = f'{ejercicio.ejercicio.tema.__str__()} - { ejercicio.ejercicio.dificultad }'
         student = estudiante.pk
         # Se actualiza el roster con el ejercicio resuelto
@@ -102,7 +134,7 @@ class EjercicioAPIView(APIView):
             # Si no existe skill, crear modelo de nuevo
             if 'skill not found' in str(e): 
                 
-                roster,model = self.create_model_roster()
+                roster = self.create_model_roster()
             
             # Agregar estudiante y actualizar su estado
             if 'student name not found' in str(e):
@@ -110,8 +142,6 @@ class EjercicioAPIView(APIView):
                 roster.update_state(skill, student,self.get_status(ejercicio))
 
         maestria = roster.get_mastery_prob(skill, estudiante.pk)
-        print(f'Correcto {self.get_status(ejercicio)}')
-        print(f'Maestria: {maestria}, Dificultad: {ejercicio.ejercicio.dificultad}, Estudiante: {estudiante}, Tema: {tema.pk}')
 
         # Se actualiza la dificultad del estudiante en base a la maestria del tema
         estudiantes_tema,_ = EstudianteTema.objects.get_or_create(tema=tema,estudiante=estudiante)

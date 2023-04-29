@@ -12,3 +12,4 @@ djangorestframework-recaptcha
 pyBKT
 pandas
 numpy
+django-extensions

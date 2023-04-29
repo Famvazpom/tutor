@@ -35,6 +35,7 @@ class TemaExplicacionSerializer(serializers.ModelSerializer):
     
     def get_explicacion(self,obj):
         explicacion = Explicacion.objects.filter(tema=obj).last()
+        
         return ExplicacionSerializer(explicacion).data
 
 class MateriaTemaSerializer(serializers.ModelSerializer):
