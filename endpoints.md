@@ -112,21 +112,45 @@ Ejemplo de un objeto
 
 En este endpoint podras consultar todas las explicaciones ingresados en el tutor virtual
 
-### tutor/api/explicaciones/id/
+### tutor/api/explicaciones/
 
 En este endpoint podras consultar una explicacion en especifico, entrega sus datos base, un enlace a la parte anterior y un enlace a la parte siguiente.
 
+Debes enviar el id del tema por query para obtener una explicación.
+
+Ejemplo:
+```
+    tutor/api/explicaciones/?tema=1
+```
+
+
 Ejemplo de un objeto
 ```
-{
-        "id": 1,
-        "titulo": "PRUEBA",
-        "descripcion": "Recordemos del tema de productos notables que el producto de binomios con un término común genera el siguiente resultado:\r\n\\begin{equation}\r\n(x+a)(x+b) = x^2+(a+b)x+ab\r\n\\end{equation}\r\n\r\nObserva que del producto se obtuvieron tres términos y además:\r\n\r\n+ Uno de los tres términos es el cuadrado del término común de ambos binomios.\r\n+ Otro de los tres términos es el producto de los términos que no son comunes en los binomios.\r\n+ El término restante es la suma de los términos no comunes multiplicados por el término común en los binomios.\r\n\r\nEstas observaciones son la clave para realizar la factorización, la cual es el proceso inverso del desarrollo del producto notable:\r\n\r\n\\begin{equation}\r\nx^2+(a+b)x+ab =  (x+a)(x+b)\r\n\\end{equation}",
-        "voz": "http://localhost:8000/media/voz/1_PRUEBA.mp3",
+    {
+       "id": 51,
         "anterior": null,
-        "siguiente": null
+        "siguiente": "/tutor/api/explicaciones-data/52/",
+        "titulo": "FACTORIZACION 4 b^{2} + 28 b + 49",
+        "descripcion": "$4 b^{2} + 28 b + 49$",
+        "voz_texto": "En este ejemplo, vamos a factorizar el polinomio: $4 b^{2} + 28 b + 49$",
+        "voz": "/media/voz/51_FACTORIZACION_4_b%5E%7B2%7D_%2B_28_b_%2B_49.mp3",
+        "dificultad": 2,
+        "detalles": null
     }
 ```
+
+Los siguientes datos deben aparecer en la plataforma:
+* Descripcion : Es lo que aparecera en la "pizarra"
+* Voz: El archivo de voz que se esta utilizando
+* Detalles: Estos detalles deben aparecer como un ? el cual con un hover se muestren.
+* Siguiente: Enlace a la siguiente parte de la explicacion
+* Anterior: Enlace a la parte anterior de la explicacion
+
+Datos extra: 
+* voz_texto: Transcripcion de la voz a texto
+* Id: Id de la explicacion
+* dificutlad: Nivel de dificultad de la explicacion.
+
 
 ### tutor/api/estudiante
 
