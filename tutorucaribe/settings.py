@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = find_or_create_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost','*', 'https://tutorunicaribe.azurewebsites.net']
 
@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'usuarios.apps.UsuariosConfig',
     'tutor.apps.TutorConfig',
     'corsheaders',
-    #'django_extensions',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -207,7 +207,8 @@ CORS_ALLOW_HEADERS = [
     "x-requested-with",
     "Access-Control-Allow-Origin",
     "Access-Control-Allow-Headers",
-    "Acces-Control-Allow-Methods"
+    "Access-Control-Requested-Headers",
+    "Access-Control-Allow-Methods"
 ]
 
 CORS_ALLOWED_ORIGINS = [

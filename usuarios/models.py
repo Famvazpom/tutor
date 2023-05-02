@@ -14,7 +14,8 @@ class Perfil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     apellido_materno = models.CharField(max_length=50, blank=True)
     programa_educativo = models.ForeignKey(ProgramaEducativo, on_delete=models.CASCADE)
-    
+    nivel_acceso = models.IntegerField(default=1)
+
     def __str__(self):
         return f'{ self.user.username } - { self.user.first_name } { self.user.last_name } { self.apellido_materno }'
 
