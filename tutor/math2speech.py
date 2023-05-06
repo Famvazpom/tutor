@@ -2,6 +2,7 @@ from .Cadenas import *
 from gtts import gTTS
 from django.utils.crypto import get_random_string
 
+
 class math2speech:
     exponentes = None
     simbolos = None
@@ -110,6 +111,7 @@ class math2speech:
         voz = gTTS(text=cadena,lang=self.lenguaje,slow=False)
         voz.save(filename)
         return
+     
     
     def procesoCompleto(self,ltx=None,variables=None,filename='math2speech.mp3'):
         if not ltx:
@@ -118,5 +120,5 @@ class math2speech:
             raise Exception('Es necesario la lista de variables')
         datos = self.procesaCadena(ltx,variables)
         cadena = self.obtenCadena(0,datos['arbol'])
-        self.generaAudio(cadena,filename)
+        cadena = cadena.replace(' .','')
     
