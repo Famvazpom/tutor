@@ -24,8 +24,9 @@ Si deseas contribuir al desarrollo de este proyecto, sigue los siguientes pasos:
 # Créditos
 Este proyecto fue desarrollado como proyecto terminal de la Universidad del Caribe por:
 * [Noe Vazquez][1] ( Backend ) - Correo electrónico: famvazpom@gmail.com
-* [Saulo Sanchez][3] ( Frontend ) - Correo electrónico: correo2@example.com
-* [Joan Mendez][2] ( Documentación ) - Correo electrónico: correo3@example.com
+* [Saulo Sanchez][3] ( Frontend ) - Correo electrónico: sr.saulo.sanchez@gmail.com
+* [Joan Mendez][2] ( Documentación ) - Correo electrónico: jj.mpwizard@gmail.com
+* Hector Fernando Gomez ( Asesor ) - Correo electrónico: fgomez@ucaribe.edu.mx
 
 [1]: https://github.com/Famvazpom "Noe Vazquez"
 [2]: https://github.com/JJWizardMP "Joan Mendez"
