@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy
 from rest_framework import serializers
-from tutor.models import Materia, Tema, Explicacion, Ejercicio,EstudianteEjercicio,EstudianteTema
+from tutor.models import Materia, Tema, Explicacion, Ejercicio,EstudianteEjercicio,EstudianteTema,Requests
 from usuarios.models import Perfil,ProgramaEducativo
 from django.contrib.auth import authenticate
 
@@ -134,3 +134,11 @@ class PerfilSerializer(serializers.ModelSerializer):
 
     def get_materias(self,object):
         return MateriaEstudianteSerializer(Materia.objects.all(),many=True,context={'request': self.context['request']}).data
+    
+
+class RequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Requests
+        exclude = ('estudiante',)
+
+

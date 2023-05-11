@@ -4,6 +4,7 @@ from django.db import models
 from usuarios.models import Perfil
 from .math2speech import math2speech
 from django.conf import settings 
+from django.core.validators import MaxValueValidator, MinValueValidator
 m2s = math2speech()
 
 # Create your models here.
@@ -55,7 +56,7 @@ class Explicacion(models.Model):
         result = re.split('\\\\begin{equation}\\r\\n(.*)\\r\\n\\\\end{equation}', self.voz_texto)
         final = []
         for i in result:
-            final += re.split('\$(.*)\$',i)
+            final += re.split('\$(.*?)\$',i)
             
             
         for id,text in enumerate(final):
@@ -64,7 +65,9 @@ class Explicacion(models.Model):
                 math = math2speech()
                 c = math.procesaCadena(text,[char for char in text if char.isalpha()]) 
                 final[id] = math.obtenCadena(0,c['arbol']) if c else final[id]
-        m2s.generaAudio(''.join(final),filename=voicename)
+        final = ''.join(final)
+        final = final.replace(' .','')
+        m2s.generaAudio(final,filename=voicename)
         return f'voz/{filename}'
 
     def __str__(self):
@@ -115,3 +118,10 @@ class EstudianteEjercicio(models.Model):
 
     def __str__(self):
         return f'{self.estudiante} - {self.ejercicio} - {self.ejercicio.dificultad}'
+
+class Requests(models.Model):
+    estudiante = models.ForeignKey(Perfil,on_delete=models.CASCADE)
+    cantidad = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return f'{self.estudiante.__str__()} - {self.cantidad}'

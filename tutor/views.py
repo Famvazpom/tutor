@@ -4,9 +4,9 @@ from rest_framework import authentication, permissions,status
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from django.contrib.auth import authenticate, login
 from django.utils.timezone import now
-from tutor.api.serializers import ExplicacionSerializer,LoginSerializer,EstudianteEjercicioSerializer
+from tutor.api.serializers import ExplicacionSerializer,LoginSerializer,EstudianteEjercicioSerializer,RequestSerializer
 from tutor.api.exceptions import *
-from tutor.models import Ejercicio,Tema,EstudianteEjercicio,EstudianteTema,Explicacion
+from tutor.models import Ejercicio,Tema,EstudianteEjercicio,EstudianteTema,Explicacion,Requests
 from usuarios.models import Perfil
 import pandas as pd
 import numpy as np
@@ -57,8 +57,6 @@ class ExplicacionAPIView(APIView):
 
         return Response(ExplicacionSerializer(ejercicio).data)
     
-
-
 class EjercicioAPIView(APIView):
 
     def dump_roster(self,roster):
@@ -237,3 +235,25 @@ class EjercicioAPIView(APIView):
         self.update_difficulty(request.user.perfil,ejercicio.ejercicio.tema,ejercicio)
         return Response(EstudianteEjercicioSerializer(ejercicio).data)
     
+class RequestAPIView(APIView):
+    
+    def get(self,request):
+        obj,_ = Requests.objects.get_or_create(estudiante=request.user.perfil)
+        return Response(RequestSerializer(obj).data)
+  
+    def post(self, request, format=None):
+        obj,_ = Requests.objects.get_or_create(estudiante=request.user.perfil)
+        # Si es admin no hay limite
+        if request.user.perfil.nivel_acceso == 3:
+            obj.cantidad +=1
+            obj.save()
+            return Response(RequestSerializer(obj).data)
+        
+        # En todos los demas casos se limita a 10
+        if obj.cantidad < 10:
+            obj.cantidad +=1
+            obj.save()
+            return Response(RequestSerializer(obj).data)
+        else:
+            return Response(RequestLimit.default_detail, status=RequestLimit.status_code)
+  

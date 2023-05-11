@@ -29,3 +29,8 @@ class NotExplain(APIException):
     status_code = 404
     default_detail = 'No se encuentran explicaciones.'
     default_code = 'not_match'
+
+class RequestLimit(APIException):
+    status_code = 403
+    default_detail = 'Ha excedido el limite de mensajes.'
+    default_code = 'request_limit'

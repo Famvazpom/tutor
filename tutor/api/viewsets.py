@@ -29,6 +29,15 @@ class EjercicioViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JSONWebTokenAuthentication,]
 
+class EjercicioAdmonViewSet(viewsets.ModelViewSet):
+    queryset = EstudianteEjercicio.objects.all()
+    serializer_class = EstudianteEjercicioSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JSONWebTokenAuthentication,]
+
+    def get_queryset(self):
+        return super().get_queryset() if self.request.user.is_superuser else super().get_queryset().filter(estudiante=self.request.user.perfil)
+
 class EstudianteViewSet(viewsets.ModelViewSet):
     queryset = Perfil.objects.all()
     serializer_class = PerfilSerializer

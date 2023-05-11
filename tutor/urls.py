@@ -10,10 +10,12 @@ router.register('materia',MateriaViewSet)
 router.register('temas',TemaViewSet)
 router.register('explicaciones-data',ExplicacionViewSet)
 router.register('estudiante',EstudianteViewSet)
+router.register('ejercicios',EjercicioAdmonViewSet)
 
 urlpatterns = [
     # [------------- API --------------] # 
     path('api/',include(router.urls)),
     path('api/ejercicio/',EjercicioAPIView.as_view()),
     path('api/explicaciones/',ExplicacionAPIView.as_view()),
+    path('api/mensajes/',RequestAPIView.as_view()),
 ]

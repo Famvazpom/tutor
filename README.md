@@ -28,6 +28,15 @@ Este proyecto fue desarrollado como proyecto terminal de la Universidad del Cari
 * [Joan Mendez][2] ( Documentación ) - Correo electrónico: jj.mpwizard@gmail.com
 * Hector Fernando Gomez ( Asesor ) - Correo electrónico: fgomez@ucaribe.edu.mx
 
+Puedes encontrar el código del frontend [Aqui][6].
+
+Puedes visitar el tutor virtual [Aqui][4].
+
+Conoce los derechos de autor [Aqui][5].
+
 [1]: https://github.com/Famvazpom "Noe Vazquez"
 [2]: https://github.com/JJWizardMP "Joan Mendez"
 [3]: https://github.com/SauloSanchez "Saulo Sanchez"
+[4]: https://mathias-tutor-virtual.vercel.app/ "MATH-IAS"
+[5]: mathias-public-derechos-autor.vercel.app "MATH-IAS derechos"
+[6]: https://github.com/SauloSanchez/mathiaspublic  "MATH-IAS Front"
