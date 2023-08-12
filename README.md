@@ -38,5 +38,5 @@ Conoce los derechos de autor [Aqui][5].
 [2]: https://github.com/JJWizardMP "Joan Mendez"
 [3]: https://github.com/SauloSanchez "Saulo Sanchez"
 [4]: https://mathias-tutor-virtual.vercel.app/ "MATH-IAS"
-[5]: mathias-public-derechos-autor.vercel.app "MATH-IAS derechos"
+[5]: https://mathias-public-derechos-autor.vercel.app "MATH-IAS derechos"
 [6]: https://github.com/SauloSanchez/mathiaspublic  "MATH-IAS Front"
